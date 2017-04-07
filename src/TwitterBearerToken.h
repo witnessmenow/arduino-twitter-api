@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2017 Brian Lough. All right reserved.
 
-TwitterApi - An Arduino wrapper for the YouTube API
+Get the twitter bearer token from consumerKey and consumerSecret
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -19,29 +19,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 
-#ifndef TwitterApi_h
-#define TwitterApi_h
+#ifndef TwitterBearerToken_h
+#define TwitterBearerToken_h
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <Client.h>
+#include <libb64/cencode.h>
 
-#define TW_API_HOST "api.twitter.com"
-#define TW_API_SSL_PORT 443
-#define TW_API_TIMEOUT 1500
+#define TWB_API_HOST "api.twitter.com"
+#define TWB_API_SSL_PORT 443
+#define TWB_API_TIMEOUT 1500
 
-class TwitterApi
+class TwitterBearerToken
 {
   public:
-    TwitterApi (Client &client);
-    String sendGetToTwitter(String command);
-    String getUserStatistics(String screenName);
-    void setBearerToken(String bearerToken);
+    TwitterBearerToken(Client &client);
+    String getNewToken(const char * consumerKey, const char * consumerSecret);
+    String token;
 
   private:
     Client *client;
-    String _bearerToken;
-    const int maxMessageLength = 10000;
+    char * getEncodedBearerCredentials(const char * consumerKey, const char * consumerSecret);
+    const int maxMessageLength = 1000;
 };
 
 #endif

@@ -21,102 +21,12 @@
 
 #include "TwitterApi.h"
 
-TwitterApi::TwitterApi(const char * consumerKey, const char * consumerSecret, Client &client)	{
-	_consumerKey = consumerKey;
-	_consumerSecret = consumerSecret;
+TwitterApi::TwitterApi(Client &client)	{
 	this->client = &client;
-}
-
-bool TwitterApi::encodeBearerCredientials() {
-	char toencodeLen = strlen(_consumerKey)+strlen(_consumerSecret)+1;
-	char *toencode = new char[toencodeLen];
-	if(toencode == NULL)
-	  return false;
-	_encodedBearerCreds = new char[base64_encode_expected_len(toencodeLen)+1];
-	if(_encodedBearerCreds == NULL)
-	  return false;
-
-	// They say to URL encode the key and secret for future proofing, but I am a rebel
-	encodeBearerCredientials();
-  sprintf(toencode, "%s:%s", _consumerKey, _consumerSecret);
-  if(base64_encode_chars(toencode, toencodeLen, _encodedBearerCreds) > 0 ){
-		Serial.println(String(_encodedBearerCreds));
-		return true;
-  }
-
-	return false;
 }
 
 void TwitterApi::setBearerToken(String bearerToken){
 	_bearerToken = bearerToken;
-}
-
-bool TwitterApi::updateBearerToken() {
-	char body[200];
-
-	bool finishedHeaders = false;
-	bool currentLineIsBlank = true;
-	unsigned long now;
-	bool avail;
-	// Connect with twitter api over ssl
-	Serial.println(".... trying server");
-	if (client->connect(TW_API_HOST, TW_API_SSL_PORT)) {
-		Serial.println(".... connected to server");
-		String a="";
-		char c;
-		int ch_count=0;
-		client->println("POST /oauth2/token HTTP/1.1");
-		client->println("Host: " TW_API_HOST);
-		client->println("User-Agent: arduino/1.0.0");
-		client->println("Authorization: Basic " + String(_encodedBearerCreds));
-		client->println("Content-Type: application/x-www-form-urlencoded;charset=UTF-8");
-		client->println("Content-Length: 29");
-		client->println("");
-		client->println("grant_type=client_credentials");
-		client->println("");
-		now=millis();
-		avail=false;
-		while (millis() - now < TW_API_TIMEOUT) {
-			while (client->available()) {
-
-				// Allow body to be parsed before finishing
-				avail = finishedHeaders;
-				char c = client->read();
-				Serial.write(c);
-
-				if(!finishedHeaders){
-					if (currentLineIsBlank && c == '\n') {
-						finishedHeaders = true;
-					}
-				} else {
-					if (ch_count < maxMessageLength)  {
-						body[ch_count] = c;
-						ch_count++;
-					}
-				}
-
-				if (c == '\n') {
-					currentLineIsBlank = true;
-				}else if (c != '\r') {
-					currentLineIsBlank = false;
-				}
-			}
-			if (avail) {
-				DynamicJsonBuffer jsonBuffer;
-				JsonObject& root = jsonBuffer.parseObject(body);
-				if (root.success()) {
-					if (root.containsKey("access_token")) {
-						_bearerToken = root["access_token"].as<String>();
-						return true;
-					}
-				}
-				Serial.println("Error with response:");
-				Serial.println(body);
-				break;
-			}
-		}
-	}
-	return false;
 }
 
 String TwitterApi::sendGetToTwitter(String command) {
