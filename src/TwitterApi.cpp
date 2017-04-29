@@ -38,7 +38,7 @@ String TwitterApi::sendGetToTwitter(String command) {
 	bool avail;
 	// Connect with twitter api over ssl
 	if (client->connect(TW_API_HOST, TW_API_SSL_PORT)) {
-		Serial.println(".... connected to server");
+		//Serial.println(".... connected to server");
 		String a="";
 		char c;
 		int ch_count=0;
@@ -60,7 +60,7 @@ String TwitterApi::sendGetToTwitter(String command) {
 				if(!finishedHeaders){
 					if (currentLineIsBlank && c == '\n') {
 						finishedHeaders = true;
-						Serial.println(headers);
+						//Serial.println(headers);
 					}
 					else{
 						headers = headers + c;
@@ -80,9 +80,9 @@ String TwitterApi::sendGetToTwitter(String command) {
 				}
 			}
 			if (avail) {
-				Serial.println("Body:");
-				Serial.println(body);
-				Serial.println("END");
+				//Serial.println("Body:");
+				//Serial.println(body);
+				//Serial.println("END");
 				break;
 			}
 		}
