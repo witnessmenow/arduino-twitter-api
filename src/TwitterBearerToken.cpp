@@ -70,14 +70,25 @@ String TwitterBearerToken::getNewToken(const char * consumerKey, const char * co
 		client->println("Authorization: Basic " + encodedCredentials);
     client->println("Accept: */*");
 		client->println("Content-Length: 29");
-    client->println("Content-Type: application/x-www-form-urlencoded");
+    client->println("Content-Type: application/x-www-form-urlencoded;charset=utf-8");
 		client->println();
+    delay(100);
 		client->println("grant_type=client_credentials");
+
+    Serial.println("POST /oauth2/token HTTP/1.1");
+		Serial.println("Host: " TWB_API_HOST);
+		Serial.println("User-Agent: arduino/1.0.0");
+		Serial.println("Authorization: Basic " + encodedCredentials);
+    Serial.println("Accept: */*");
+		Serial.println("Content-Length: 29");
+    Serial.println("Content-Type: application/x-www-form-urlencoded");
+		Serial.println();
+		Serial.println("grant_type=client_credentials");
 		now=millis();
 		avail=false;
 		while (millis() - now < TWB_API_TIMEOUT) {
 			while (client->available()) {
-
+        Serial.println("Got something");
 				// Allow body to be parsed before finishing
 				avail = finishedHeaders;
 				char c = client->read();
