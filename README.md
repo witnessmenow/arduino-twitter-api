@@ -20,6 +20,6 @@ I am hoping to make this a little more simple going forward, as we should be abl
 - Get curl on your machine ([Windows: try this](http://callejoabel.blogspot.co.uk/2013/09/making-curl-work-on-windows-7.html) it shoud already be installed on mac and linux)
 - Make the following request using the key and token from the above section
 ```
-curl -u "$CONSUMER_KEY:$CONSUMER_SECRET" --data 'grant_type=client_credentials' 'https://api.twitter.com/oauth2/token'
+curl -u "CONSUMER_KEY:CONSUMER_SECRET" --data 'grant_type=client_credentials' 'https://api.twitter.com/oauth2/token'
 ```
 - The response will contain a bearer token (it is the big long one!), use this with the setBearerToken [as shown in the example](https://github.com/witnessmenow/arduino-twitter-api/blob/master/examples/esp8266/settingBearerTokenInSketch/settingBearerTokenInSketch.ino).

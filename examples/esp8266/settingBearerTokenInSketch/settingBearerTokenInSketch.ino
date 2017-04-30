@@ -1,8 +1,8 @@
 #include <TwitterApi.h>
 
 /*******************************************************************
- *  An example of usisng the distance-matrix api to get            *
- *  travel time (with traffic) between two locations               *
+ *  An Example of getting data back from the TwitterAPI            *
+ *  https://github.com/witnessmenow/arduino-twitter-api            * 
  *                                                                 *
  *  Written by Brian Lough                                         *
  *******************************************************************/
@@ -16,8 +16,7 @@ char ssid[] = "SSID";       // your network SSID (name)
 char password[] = "password";  // your network key
 
 // Normally we would use these to generate the bearer token but its not working yet :/
-#define CONSUMER_KEY "consumerkey" //not needed for this sketch as we are setting bearer token directly
-#define CONSUMER_SECRET "consumerSecret" // as above
+// Use steps on the readme to generate the Bearer Token
 
 #define BEARER_TOKEN "this is long jumble of characters"
 
@@ -27,7 +26,7 @@ char password[] = "password";  // your network key
 //    'https://api.twitter.com/oauth2/token'
 
 WiFiClientSecure client;
-TwitterApi api(CONSUMER_KEY, CONSUMER_SECRET, client);
+TwitterApi api(client);
 
 unsigned long api_mtbs = 60000; //mean time between api requests
 unsigned long api_lasttime = 0;   //last time api request has been done
@@ -62,20 +61,6 @@ void setup() {
   IPAddress ip = WiFi.localIP();
   Serial.println(ip);
 
-//  if(api.encodeBearerCredientials()) {
-//    Serial.println("Encoded bearer creds");
-//  } else {
-//    Serial.println("Failed to encode bearer creds");
-//    return;
-//  }
-//
-//  if(api.updateBearerToken()) {
-//    Serial.println("Got bearer token");
-//    haveBearerToken = true;
-//  } else {
-//    Serial.println("Did not get bearer token");
-//  }
-
   api.setBearerToken(BEARER_TOKEN);
   haveBearerToken = true;
   getTwitterStats(screenName);
@@ -90,6 +75,7 @@ void getTwitterStats(String name) {
     JsonObject& response = jsonBuffer.parseObject(responseString);
     if (response.success()) {
       Serial.println("parsed Json");
+      // Use Arduino Json to parse the data
     } else {
       Serial.println("Failed to parse Json");
     }
