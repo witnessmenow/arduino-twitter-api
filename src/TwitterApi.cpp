@@ -96,3 +96,32 @@ String TwitterApi::getUserStatistics(String screenName){
 	//Serial.println(command);
 	return sendGetToTwitter(command);  //recieve reply from twitter
 }
+
+int TwitterApi::getTwitterFollowers(String twitter_name){
+	String responseString = getUserStatistics(twitter_name);
+    DynamicJsonDocument  jsonBuffer(8096);
+    DeserializationError error = deserializeJson(jsonBuffer, responseString);
+    if (_debug){
+      switch (error.code()) {
+      case DeserializationError::Ok:
+          Serial.print(F("Deserialization succeeded"));
+          break;
+      case DeserializationError::InvalidInput:
+          Serial.print(F("Invalid input!"));
+          break;
+      case DeserializationError::NoMemory:
+          Serial.print(F("Not enough memory"));
+          break;
+      default:
+          Serial.print(F("Deserialization failed"));
+          break;
+      }
+    }
+    if (!error) {
+      int twitterFollowers = jsonBuffer["followers_count"].as<int>();
+	  return twitterFollowers;
+    } else {
+      Serial.println("Failed to parse Json for twitter");
+	  return 0;
+    }
+}
