@@ -37,6 +37,8 @@ class TwitterApi
     String sendGetToTwitter(String command);
     String getUserStatistics(String screenName);
     void setBearerToken(String bearerToken);
+    int getTwitterFollowers(String twitter_name);    
+    bool _debug = false;
 
   private:
     Client *client;
