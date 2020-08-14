@@ -112,11 +112,11 @@ String TwitterBearerToken::getNewToken(const char * consumerKey, const char * co
 				}
 			}
 			if (avail) {
-				DynamicJsonBuffer jsonBuffer;
-				JsonObject& root = jsonBuffer.parseObject(body);
-				if (root.success()) {
-					if (root.containsKey("access_token")) {
-						token = root["access_token"].as<String>();
+				DynamicJsonDocument  jsonBuffer(1024);
+				DeserializationError error = deserializeJson(jsonBuffer, body);
+				if (!error) {
+					if (jsonBuffer.containsKey("access_token")) {
+						token = jsonBuffer["access_token"].as<int>();
 						return token;
 					}
 				}
