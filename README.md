@@ -1,7 +1,10 @@
-# arduino-twitter-api
-A wrapper for the [Twitter API](https://dev.twitter.com/overview/api) for Arduino (works on ESP8266)
+# DEPRACATED in favor of new library I am working on
 
-WORK IN PROGRESS - API call works if you set the bearer token directly. It should be able to generate the bearer Credentials from the consumer key and secret and make a request to get the token but its not working at the moment.
+https://github.com/witnessmenow/TweESP32
+
+
+## arduino-twitter-api
+A wrapper for the [Twitter API](https://dev.twitter.com/overview/api) for Arduino (works on ESP8266)
 
 In the api FAQ twitter mentions that they do not expire bearer tokens, so once you do not generate a new one with the same Credentials it should continue working
 
